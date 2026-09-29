@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MedStack — Medical Resources</title>
+  <meta name="description" content="MedStack — a colourful resource hub for medical students." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg:#f7f8fc; --card:#fff; --text:#172033; --muted:#6b7280;
+      --purple:#7257ff; --blue:#32a8ff; --pink:#ff5ca8; --green:#27c98a;
+      --yellow:#ffc857; --border:#e8eaf2; --shadow:0 18px 50px rgba(33,37,67,.09);
+    }
+    *{box-sizing:border-box} body{margin:0;background:var(--bg);color:var(--text);font-family:"DM Sans",sans-serif}
+    button,input,select{font:inherit} button{cursor:pointer}
+    .nav{height:74px;background:#fff;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 5vw;position:sticky;top:0;z-index:20}
+    .brand{display:flex;gap:10px;align-items:center;font-family:"Space Grotesk";font-weight:700;font-size:22px}
+    .logo{width:39px;height:39px;border-radius:13px;background:linear-gradient(135deg,var(--purple),var(--pink));display:grid;place-items:center;color:white;font-weight:700}
+    .nav-actions{display:flex;gap:10px;align-items:center}
+    .btn{border:0;border-radius:13px;padding:11px 17px;font-weight:700;transition:.2s}
+    .btn:hover{transform:translateY(-1px)} .primary{background:var(--purple);color:#fff}.ghost{background:#f0efff;color:#5a45d9}
+    .profile{display:none;align-items:center;gap:10px}.profile img{width:34px;height:34px;border-radius:50%}
+    .hero{padding:70px 5vw 50px;position:relative;overflow:hidden;background:linear-gradient(135deg,#f2efff 0%,#fff 47%,#eaf9ff 100%)}
+    .orb{position:absolute;border-radius:50%;filter:blur(2px);opacity:.45}.o1{width:210px;height:210px;background:#ffd2e7;right:8%;top:30px}.o2{width:150px;height:150px;background:#d5d0ff;left:3%;bottom:-50px}
+    .hero-inner{max-width:1150px;margin:auto;position:relative}.eyebrow{color:var(--purple);font-weight:800;letter-spacing:.08em;text-transform:uppercase;font-size:13px}
+    h1{font-family:"Space Grotesk";font-size:clamp(42px,7vw,78px);line-height:.98;max-width:850px;margin:14px 0 20px}
+    h1 span{background:linear-gradient(90deg,var(--purple),var(--pink),var(--blue));-webkit-background-clip:text;color:transparent}
+    .hero p{max-width:680px;color:var(--muted);font-size:18px;line-height:1.7}.hero-buttons{display:flex;gap:12px;flex-wrap:wrap;margin-top:25px}
+    main{max-width:1150px;margin:auto;padding:35px 5vw 70px}.toolbar{display:flex;justify-content:space-between;gap:15px;align-items:center;margin-bottom:22px;flex-wrap:wrap}
+    .search{background:white;border:1px solid var(--border);border-radius:14px;padding:13px 15px;width:min(420px,100%);outline:none}.filters{display:flex;gap:8px;flex-wrap:wrap}
+    .chip{border:1px solid var(--border);background:#fff;padding:9px 13px;border-radius:999px;color:var(--muted);font-weight:600}.chip.active{background:#eeeaff;color:#5a45d9;border-color:#dcd6ff}
+    .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}.empty{grid-column:1/-1;text-align:center;padding:50px;color:var(--muted)}
+    .resource{background:#fff;border:1px solid var(--border);border-radius:20px;padding:20px;box-shadow:0 8px 28px rgba(30,34,60,.04);display:flex;flex-direction:column;min-height:235px}
+    .resource-top{display:flex;justify-content:space-between;gap:10px}.icon{width:47px;height:47px;border-radius:15px;display:grid;place-items:center;font-size:22px}
+    .pdf{background:#ffe8ef}.doc{background:#e7f2ff}.notes{background:#e9fff6}.other{background:#fff4d9}
+    .tag{font-size:12px;font-weight:800;padding:7px 10px;border-radius:999px;background:#f3f4f8;color:#697083;height:max-content}
+    .resource h3{margin:17px 0 7px;font-family:"Space Grotesk";font-size:19px}.resource p{color:var(--muted);font-size:14px;line-height:1.5;margin:0 0 14px}
+    .meta{font-size:12px;color:#8b91a1;margin-top:auto;margin-bottom:13px}.download{width:100%;background:#f6f6fa;color:#30384a}
+    .modal-backdrop{display:none;position:fixed;inset:0;background:rgba(20,23,37,.55);z-index:50;padding:20px;align-items:center;justify-content:center}.modal{width:min(560px,100%);background:#fff;border-radius:24px;padding:26px;box-shadow:var(--shadow)}
+    .modal h2{font-family:"Space Grotesk";margin-top:0}.close{float:right;border:0;background:#f3f4f8;border-radius:50%;width:35px;height:35px}
+    .form-group{margin:14px 0}.form-group label{display:block;font-size:13px;font-weight:700;margin-bottom:7px}.form-group input,.form-group select,.form-group textarea{width:100%;padding:12px;border:1px solid var(--border);border-radius:12px;outline:none}.form-group textarea{min-height:90px;resize:vertical}
+    .drop{border:2px dashed #d9dbea;border-radius:16px;padding:24px;text-align:center;background:#fafaff}.drop small{display:block;color:var(--muted);margin-top:5px}
+    .progress{height:8px;background:#eeeef5;border-radius:99px;overflow:hidden;display:none;margin-top:10px}.bar{height:100%;width:0;background:linear-gradient(90deg,var(--purple),var(--pink))}
+    .status{font-size:13px;color:var(--muted);margin-top:9px;min-height:18px}
+    footer{padding:30px 5vw;border-top:1px solid var(--border);text-align:center;color:var(--muted);background:#fff}
+    @media(max-width:850px){.grid{grid-template-columns:repeat(2,1fr)}} @media(max-width:600px){.grid{grid-template-columns:1fr}.hero{padding-top:48px}.nav{padding:0 4vw}.nav .brand span{display:none}}
+  </style>
+</head>
+<body>
+  <nav class="nav">
+    <div class="brand"><div class="logo">M</div><span>MedStack</span></div>
+    <div class="nav-actions">
+      <div class="profile" id="profile"><img id="avatar"><span id="userName"></span><button class="btn ghost" id="logoutBtn">Log out</button></div>
+      <button class="btn primary" id="loginBtn">Continue with Google</button>
+    </div>
+  </nav>
+
+  <section class="hero">
+    <div class="orb o1"></div><div class="orb o2"></div>
+    <div class="hero-inner">
+      <div class="eyebrow">Your medical resource stack</div>
+      <h1>Study smarter.<br><span>Stack everything.</span></h1>
+      <p>MedStack is a colourful, community-powered library for notes, PDFs, past papers, books and other study resources. Sign in with Google to contribute.</p>
+      <div class="hero-buttons">
+        <button class="btn primary" id="browseBtn">Browse resources ↓</button>
+        <button class="btn ghost" id="postHeroBtn">＋ Post a resource</button>
+      </div>
+    </div>
+  </section>
+
+  <main id="resources">
+    <div class="toolbar">
+      <input class="search" id="search" placeholder="Search notes, anatomy, past papers..." />
+      <div class="filters">
+        <button class="chip active" data-cat="All">All</button>
+        <button class="chip" data-cat="Notes">Notes</button>
+        <button class="chip" data-cat="Past Papers">Past Papers</button>
+        <button class="chip" data-cat="Books">Books</button>
+        <button class="chip" data-cat="Other">Other</button>
+      </div>
+    </div>
+    <div class="grid" id="grid"><div class="empty">Loading resources…</div></div>
+  </main>
+
+  <footer>© 2026 MedStack · Built for students, by students.</footer>
+
+  <div class="modal-backdrop" id="modalBackdrop">
+    <div class="modal">
+      <button class="close" id="closeModal">×</button>
+      <h2>Post a resource</h2>
+      <p style="color:#6b7280">Upload a study file for the MedStack library.</p>
+      <form id="uploadForm">
+        <div class="form-group"><label>Title</label><input id="title" required maxlength="100" placeholder="e.g. Cardiovascular System Notes"></div>
+        <div class="form-group"><label>Category</label><select id="category"><option>Notes</option><option>Past Papers</option><option>Books</option><option>Other</option></select></div>
+        <div class="form-group"><label>Description</label><textarea id="description" maxlength="300" placeholder="Short description…"></textarea></div>
+        <div class="form-group"><label>File</label><div class="drop"><input id="file" type="file" required accept=".pdf,.doc,.docx,.ppt,.pptx,.xls,.xlsx,.txt,.png,.jpg,.jpeg"><small>PDF, Word, PowerPoint, Excel, text or images · max 25 MB</small></div></div>
+        <div class="progress" id="progress"><div class="bar" id="bar"></div></div><div class="status" id="status"></div>
+        <button class="btn primary" style="width:100%;margin-top:14px" type="submit">Upload to MedStack</button>
+      </form>
+    </div>
+  </div>
+
+  <script type="module">
+    // Replace these values with your Firebase Web App configuration.
+    const firebaseConfig = {
+      apiKey: "YOUR_API_KEY",
+      authDomain: "YOUR_PROJECT.firebaseapp.com",
+      projectId: "YOUR_PROJECT_ID",
+      storageBucket: "YOUR_PROJECT.firebasestorage.app",
+      messagingSenderId: "YOUR_SENDER_ID",
+      appId: "YOUR_APP_ID"
+    };
+
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
+    import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js";
+    import { getFirestore, collection, addDoc, getDocs, query, orderBy, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
+    import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-storage.js";
+
+    const configured = !firebaseConfig.apiKey.startsWith("YOUR_");
+    let auth, db, storage, currentUser = null, resources = [], activeCat = "All";
+
+    const $ = id => document.getElementById(id);
+    const modal = $("modalBackdrop");
+
+    function showModal(){ 
+      if(!currentUser){ alert("Please sign in with Google first."); return; }
+      modal.style.display="flex"; 
+    }
+    function hideModal(){modal.style.display="none"}
+
+    $("loginBtn").onclick = async () => {
+      if(!configured) return alert("Add your Firebase configuration in index.html first.");
+      try { await signInWithPopup(auth, new GoogleAuthProvider()); }
+      catch(e){ alert("Google sign-in failed: " + e.message); }
+    };
+    $("logoutBtn").onclick = () => signOut(auth);
+    $("postHeroBtn").onclick = showModal; $("closeModal").onclick = hideModal;
+    modal.onclick = e => {if(e.target===modal) hideModal()};
+    $("browseBtn").onclick = () => $("resources").scrollIntoView({behavior:"smooth"});
+
+    function fileIcon(name){
+      const ext = (name.split(".").pop()||"").toLowerCase();
+      if(ext==="pdf") return ["📕","pdf"]; if(["doc","docx"].includes(ext)) return ["📘","doc"];
+      if(["png","jpg","jpeg"].includes(ext)) return ["🖼️","other"]; return ["📄","other"];
+    }
+
+    function render(){
+      const term = $("search").value.toLowerCase().trim();
+      const filtered = resources.filter(r => (activeCat==="All" || r.category===activeCat) &&
+        (!term || (r.title+" "+(r.description||"")+" "+(r.category||"")).toLowerCase().includes(term)));
+      $("grid").innerHTML = filtered.length ? filtered.map(r => {
+        const [icon, cls] = fileIcon(r.fileName || "");
+        const date = r.createdAt?.toDate ? r.createdAt.toDate().toLocaleDateString() : "Recently";
+        return `<article class="resource">
+          <div class="resource-top"><div class="icon ${cls}">${icon}</div><span class="tag">${escapeHtml(r.category||"Other")}</span></div>
+          <h3>${escapeHtml(r.title)}</h3><p>${escapeHtml(r.description||"No description provided.")}</p>
+          <div class="meta">${escapeHtml(r.fileName||"file")} · ${date}</div>
+          <button class="btn download" data-url="${escapeAttr(r.url)}">Open / Download</button>
+        </article>`;
+      }).join("") : `<div class="empty">No resources found. Try another search or category.</div>`;
+      document.querySelectorAll(".download").forEach(b => b.onclick=()=>window.open(b.dataset.url,"_blank"));
+    }
+    function escapeHtml(s){return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#039;"}[c]))}
+    function escapeAttr(s){return escapeHtml(s).replace(/`/g,"&#096;")}
+
+    async function loadResources(){
+      if(!configured){ resources=[]; $("grid").innerHTML=`<div class="empty"><b>Firebase setup required.</b><br>Open the README and add your Firebase config to load the live resource library.</div>`; return; }
+      try{
+        const snap=await getDocs(query(collection(db,"resources"),orderBy("createdAt","desc")));
+        resources=snap.docs.map(d=>({id:d.id,...d.data()})); render();
+      }catch(e){$("grid").innerHTML=`<div class="empty">Could not load resources. Check your Firestore rules and configuration.</div>`; console.error(e)}
+    }
+
+    $("search").oninput=render;
+    document.querySelectorAll(".chip").forEach(c=>c.onclick=()=>{document.querySelectorAll(".chip").forEach(x=>x.classList.remove("active"));c.classList.add("active");activeCat=c.dataset.cat;render()});
+
+    $("uploadForm").onsubmit = async e => {
+      e.preventDefault();
+      if(!currentUser) return alert("Sign in first.");
+      const file=$("file").files[0];
+      if(!file) return;
+      if(file.size > 25*1024*1024) return alert("File is larger than 25 MB.");
+      $("progress").style.display="block"; $("bar").style.width="0%"; $("status").textContent="Uploading…";
+      try{
+        const safeName=file.name.replace(/[^\w.\- ]/g,"_");
+        const path=`uploads/${currentUser.uid}/${Date.now()}_${safeName}`;
+        const task=uploadBytesResumable(ref(storage,path),file,{contentType:file.type});
+        task.on("state_changed",
+          snap=>$("bar").style.width=(snap.bytesTransferred/snap.totalBytes*100)+"%",
+          err=>{$("status").textContent="Upload failed: "+err.message},
+          async ()=>{
+            const url=await getDownloadURL(task.snapshot.ref);
+            await addDoc(collection(db,"resources"),{
+              title:$("title").value.trim(), category:$("category").value,
+              description:$("description").value.trim(), fileName:file.name, fileSize:file.size,
+              url, storagePath:path, authorUid:currentUser.uid,
+              authorName:currentUser.displayName||"MedStack user", createdAt:serverTimestamp()
+            });
+            $("status").textContent="Uploaded successfully!";
+            $("uploadForm").reset(); await loadResources();
+            setTimeout(hideModal,700);
+          }
+        );
+      }catch(err){$("status").textContent="Upload failed: "+err.message}
+    };
+
+    if(configured){
+      const app=initializeApp(firebaseConfig); auth=getAuth(app); db=getFirestore(app); storage=getStorage(app);
+      onAuthStateChanged(auth,user=>{
+        currentUser=user;
+        $("loginBtn").style.display=user?"none":"inline-block"; $("profile").style.display=user?"flex":"none";
+        if(user){$("avatar").src=user.photoURL||"";$("userName").textContent=user.displayName||"Student";}
+      });
+      loadResources();
+    }
+  </script>
+</body>
+</html>
